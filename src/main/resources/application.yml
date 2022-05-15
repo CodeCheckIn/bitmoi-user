@@ -21,8 +21,7 @@ logging:
     org:
       springframework:
         r2dbc: DEBUG
-# jwt:
-#   #BASE64 인코딩 : codestates-bithumb-msa-team-member-spring-boot-webflux-jwt-secret
-#   secret: Y29kZXN0YXRlcy1iaXRodW1iLW1zYS10ZWFtLW1lbWJlci1zcHJpbmctYm9vdC13ZWJmbHV4LWp3dC1zZWNyZXQ=
-#   accessExpires: 7200000 #2시간 ms
-#   refreshExpires: 172800000 #2주 ms
+jwt:
+  secret: asdadaadsaasdasksaasasdsadskikiuwr98cxxcxcjckjckxdsfdsdsdsf0cxxcccnmjqqewu
+  accessExpires: 7200000 #2시간 ms
+  refreshExpires: 172800000 #2주 ms

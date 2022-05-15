@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.security.auth.login.LoginException;
 
 import com.bitmoi.user.dto.UserJoinResponse;
+import com.bitmoi.user.dto.WalletRequest;
 import com.bitmoi.user.model.Coin;
 import com.bitmoi.user.model.LoginJwt;
 import com.bitmoi.user.model.User;
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
                         } else {
                             quantity = 0;
                         }
+                        System.out.println("coin => " + coin);
                         Wallet wallet = Wallet.builder()
                                 .userId(user.getUserId())
                                 .coinId(coin.getCoin_id())
@@ -76,57 +78,12 @@ public class UserServiceImpl implements UserService {
                                 .updatedAt(current.times())
                                 .build();
                         System.out.println("coin : " + wallet);
-                        walletRepository.save(wallet).log();
+                        walletRepository.save(wallet).subscribe();
                         // System.out.println("coin : " + wallet);
-                    });
+                    }).subscribe();
                 }).flatMap(it -> {
                     return Mono.just(UserJoinResponse.builder().message("SUCCESS").build());
                 }).log();
-        //////////////////////
-        // Flux<Coin> coins = coinRepository.findAll();
-        // Mono<User> user = request.bodyToMono(UserSave.class) // 값 불러오기
-        // .map(it -> { // user로 세팅
-        // return User.builder()
-        // .id(it.getEmail())
-        // .name(it.getName())
-        // .password(it.getPassword())
-        // .phone(it.getPhone())
-        // .createdAt(current.times())
-        // .updatedAt(current.times())
-        // .build();
-        // })
-        // .flatMap(userRepository::save) // 저장
-        // ;
-        // return coins.zipWith(user).doOnNext(it -> {
-        // System.out.println("it " + it.toString());
-        // // return Flux.just(UserJoinResponse.builder().message("SUCCESS").build());
-        // });
-        // return Mono.just(UserJoinResponse.builder().message("SUCCESS").build());
-        // .doOnNext(user -> // 지갑 생성
-        // {
-        // System.out.println("user => " + user);
-        // coinRepository.findAll().doOnNext(coin -> {
-        // float quantity = 0.0f;
-        // if (coin.getName().equals("KRW")) {
-        // quantity = 100000;
-        // } else {
-        // quantity = 0;
-        // }
-        // Wallet wallet = Wallet.builder()
-        // .userId(user.getUserId())
-        // .coinId(coin.getCoin_id())
-        // .quantity(quantity)
-        // .avgPrice(0)
-        // .createdAt(current.times())
-        // .updatedAt(current.times())
-        // .build();
-        // System.out.println("coin : " + wallet);
-        // walletRepository.save(wallet).log();
-        // // System.out.println("coin : " + wallet);
-        // });
-        // }).flatMap(it -> {
-        // return Mono.just(UserJoinResponse.builder().message("SUCCESS").build());
-        // }).log();
     }
 
     @Override
@@ -140,17 +97,6 @@ public class UserServiceImpl implements UserService {
                     }
                     return Mono.just(UserJoinResponse.builder().message("SUCCESS").build());
                 });
-        // .flatMap(finds -> {
-        // System.out.println("==========================================" +
-        // finds.getEmail());
-        // Mono<Long> result = userRepository.findByEmail(finds.getEmail());
-        // System.out.println("result: " + result);
-        // if (result. > 0) {
-        // // return Mono.error(new Exception());
-        // return Mono.just(UserJoinResponse.builder().message("FAIL").build());
-        // }
-        // return Mono.just(UserJoinResponse.builder().message("SUCCESS").build());
-        // });
     }
 
     @Override
@@ -164,11 +110,15 @@ public class UserServiceImpl implements UserService {
         return request.bodyToMono(UserSave.class).flatMap(user -> {
             return userRepository.findByIdAndPassword(user.getEmail(), user.getPassword());
         }).flatMap(it -> {
-            if (it == null) {
-                return Mono.error(new LoginException("존재하지 않은 회원입니다."));
-            }
             String tokken = jwtProvider.createJwtToken(it, 100000);
             return Mono.just(LoginJwt.builder().accessToken(tokken).build());
+        }).switchIfEmpty(Mono.just(LoginJwt.builder().accessToken("존재하지 않은 회원입니다.").build()));
+    }
+
+    @Override
+    public Flux<Wallet> wallet(ServerRequest request) {
+        return request.bodyToFlux(WalletRequest.class).flatMap(user -> {
+            return walletRepository.findByUserId(user.getEmail());
         });
     }
 

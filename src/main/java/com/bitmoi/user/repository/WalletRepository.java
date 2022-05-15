@@ -8,13 +8,14 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
 public interface WalletRepository extends ReactiveCrudRepository<Wallet, Long> {
 
-    @Query("SELECT count(*) FROM USER WHERE id=:email")
-    Mono<Long> findByEmail(String email);
+    @Query("SELECT * FROM WALLET, USER WHERE WALLET.user_id=USER.user_id and USER.id=:email")
+    Flux<Wallet> findByUserId(String email);
 
     // @Query("INSERT INTO USER VALUES()")
     // Mono<User> join(User user);
