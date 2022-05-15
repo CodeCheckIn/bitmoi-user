@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Table
+@Table("WALLET")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
