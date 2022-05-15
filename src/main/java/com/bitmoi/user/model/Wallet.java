@@ -1,6 +1,9 @@
 package com.bitmoi.user.model;
 
+import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -29,8 +32,9 @@ public class Wallet {
     private float quantity;
     @Column
     private float avgPrice;
-    @Column
-    private String createdAt;
-    @Column
-    private String updatedAt;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }

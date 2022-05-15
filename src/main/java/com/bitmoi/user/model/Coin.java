@@ -1,6 +1,8 @@
 package com.bitmoi.user.model;
 
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -25,6 +27,7 @@ public class Coin {
     private String name;
     @Column
     private int price;
-    @Column
-    private String updatedAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }

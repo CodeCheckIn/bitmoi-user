@@ -1,6 +1,8 @@
 package com.bitmoi.user.model;
 
+import java.time.LocalDateTime;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -29,10 +31,10 @@ public class User {
     @Column
     private String phone;
 
-    @Column
-    private String createdAt;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
-    @Column
-    private String updatedAt;
+    @CreatedDate
+    private LocalDateTime updatedAt;
 
 }

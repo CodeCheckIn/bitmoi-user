@@ -53,8 +53,6 @@ public class UserServiceImpl implements UserService {
                             .name(it.getName())
                             .password(it.getPassword())
                             .phone(it.getPhone())
-                            .createdAt(current.times())
-                            .updatedAt(current.times())
                             .build();
                 })
                 .flatMap(userRepository::save) // 저장
@@ -74,8 +72,6 @@ public class UserServiceImpl implements UserService {
                                 .coinId(coin.getCoin_id())
                                 .quantity(quantity)
                                 .avgPrice(0)
-                                .createdAt(current.times())
-                                .updatedAt(current.times())
                                 .build();
                         System.out.println("coin : " + wallet);
                         walletRepository.save(wallet).subscribe();
