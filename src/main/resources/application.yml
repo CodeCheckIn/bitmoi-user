@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 0
 eureka:
   instance:
     instance-id: ${spring.application.name}:${random.value}
@@ -22,6 +22,6 @@ logging:
       springframework:
         r2dbc: DEBUG
 jwt:
-  secret: asdadaadsaasdasksaasasdsadskikiuwr98cxxcxcjckjckxdsfdsdsdsf0cxxcccnmjqqewu
+  secret: Y29kZXN0YXRlcy1iaXRodW1iLW1zYS10ZWFtLW1lbWJlci1zcHJpbmctYm9vdC13ZWJmbHV4LWp3dC1zZWNyZXQ
   accessExpires: 7200000 #2시간 ms
   refreshExpires: 172800000 #2주 ms
