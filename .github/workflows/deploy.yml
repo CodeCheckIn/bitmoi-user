@@ -3,7 +3,7 @@ name: Gradle Package
 on:
   push:
     branches:
-      - main
+      - master
 
 env:
   S3_BUCKET_NAME: bitmoi
