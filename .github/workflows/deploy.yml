@@ -43,6 +43,7 @@ jobs:
         spring.r2dbc.username: ${{ secrets.MYSQL_USERNAME }}
         spring.r2dbc.password: ${{ secrets.MYSQL_PASSWORD }}
         eureka.client.service-url.defaultZone: ${{ secrets.EUREKA_DEFAULTZONE }}
+        jwt.secret: ${{ secrets.JWT_SECRET }}
 
     # [2]
     - name: Build with Gradle
