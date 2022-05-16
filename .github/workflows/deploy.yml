@@ -9,7 +9,7 @@ env:
   S3_BUCKET_NAME: bitmoi
   RESOURCE_PATH: ./src/main/resources/application.yml
   CODE_DEPLOY_APPLICATION_NAME: bitmoi-user
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: bitmoi-server
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: bitmoi-user-group
 
 jobs:
   build:
