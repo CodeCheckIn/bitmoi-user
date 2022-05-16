@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+  - source:  /
+    destination: /home/dev/github_action
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: dev
+    group: dev
+
+hooks:
+  ApplicationStart:
+    - location: scripts/deploy.sh
+      timeout: 60
