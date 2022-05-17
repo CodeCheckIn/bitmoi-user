@@ -2,6 +2,7 @@ package com.bitmoi.user.handler;
 
 import com.bitmoi.user.dto.UserJoinResponse;
 import com.bitmoi.user.model.LoginJwt;
+import com.bitmoi.user.model.User;
 import com.bitmoi.user.model.Wallet;
 import com.bitmoi.user.repository.WalletRepository;
 import com.bitmoi.user.service.UserService;
@@ -25,11 +26,10 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 public class UserHandler {
 
     private final UserService userService;
-    private final WalletRepository coinRepository;
 
-    public Mono<ServerResponse> getAll(ServerRequest serverRequest) {
-        return ok().body(coinRepository.findAll(), Wallet.class).log();
-    }
+    // public Mono<ServerResponse> getAll(ServerRequest serverRequest) {
+    // return ok().body(userService.findAll(), User.class).log();
+    // }
 
     public Mono<ServerResponse> join(ServerRequest serverRequest) {
         Mono<UserJoinResponse> response = userService.join(serverRequest).subscribeOn(Schedulers.boundedElastic());
