@@ -1,6 +1,5 @@
 package com.bitmoi.user.Exception;
 
-import org.springframework.core.NestedRuntimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
