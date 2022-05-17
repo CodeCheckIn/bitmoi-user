@@ -18,7 +18,6 @@ public class UserRouter {
         return RouterFunctions.route()
                 .GET("/user/wallet", userHandler::wallet)
                 .POST("/user/join", userHandler::join)
-                .GET("/user", userHandler::getAll)
                 .POST("/user/check", userHandler::check)
                 .POST("/user/login", userHandler::login)
                 .build();
