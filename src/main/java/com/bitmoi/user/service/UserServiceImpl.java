@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
                     float krw = wallets.getKrw();
                     float appraisalAmount = wallets.getAppraisalAmount();
                     wallets.setHoldings(appraisalAmount + krw);
-                    wallets.setValuationPL(appraisalAmount - purchaseAmount);
+                    wallets.setValuationPl(appraisalAmount - purchaseAmount);
                     wallets.setYield((wallets.getHoldings() - Float.parseFloat(initialFunds)) * 100
                             / Float.parseFloat(initialFunds));
                     return Mono.just(wallets);
