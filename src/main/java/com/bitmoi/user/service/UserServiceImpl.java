@@ -3,6 +3,7 @@ package com.bitmoi.user.service;
 import javax.security.auth.login.LoginException;
 
 import com.bitmoi.user.dto.UserJoinResponse;
+import com.bitmoi.user.dto.WalletResponse;
 import com.bitmoi.user.model.LoginJwt;
 import com.bitmoi.user.model.User;
 import com.bitmoi.user.model.UserSave;
@@ -15,6 +16,8 @@ import com.bitmoi.user.util.currentTime;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Flux;
@@ -29,6 +32,9 @@ public class UserServiceImpl implements UserService {
     private final WalletRepository walletRepository;
     private final CoinRepository coinRepository;
     private final JwtProvider jwtProvider;
+
+    @Value("${initialFunds}")
+    String initialFunds;
 
     // 학생 등록
     @Override
@@ -55,7 +61,7 @@ public class UserServiceImpl implements UserService {
                     coinRepository.findAll().doOnNext(coin -> {
                         float quantity = 0.0f;
                         if (coin.getName().equals("KRW")) {
-                            quantity = 100000000;
+                            quantity = Float.parseFloat(initialFunds);
                         } else {
                             quantity = 0;
                         }
@@ -92,15 +98,24 @@ public class UserServiceImpl implements UserService {
             return userRepository.findByIdAndPassword(user.getEmail(), user.getPassword());
         }).flatMap(it -> {
             String tokken = jwtProvider.createJwtToken(it);
-            return Mono.just(LoginJwt.builder().accessToken(tokken).build());
+            return Mono.just(LoginJwt.builder().status(200).accessToken(tokken).build());
         }).switchIfEmpty(Mono.just(LoginJwt.builder().status(403).accessToken("").build()));
     }
 
     @Override
-    public Flux<Wallet> wallet(ServerRequest request) {
-        return Flux.just(jwtProvider.decode(request.headers().asHttpHeaders().getFirst("Authorization")))
+    public Mono<WalletResponse> wallet(ServerRequest request) {
+        return Mono.just(jwtProvider.decode(request.headers().asHttpHeaders().getFirst("Authorization")))
                 .flatMap(user -> {
                     return walletRepository.findByUserId(user);
+                }).flatMap(wallets -> {
+                    float purchaseAmount = wallets.getPurchaseAmount();
+                    float krw = wallets.getKrw();
+                    float appraisalAmount = wallets.getAppraisalAmount();
+                    wallets.setHoldings(appraisalAmount + krw);
+                    wallets.setValuationPL(appraisalAmount - purchaseAmount);
+                    wallets.setYield((wallets.getHoldings() - Float.parseFloat(initialFunds)) * 100
+                            / Float.parseFloat(initialFunds));
+                    return Mono.just(wallets);
                 });
     }
 
