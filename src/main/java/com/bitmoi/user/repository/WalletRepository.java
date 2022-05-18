@@ -21,7 +21,8 @@ public interface WalletRepository extends ReactiveCrudRepository<Wallet, Long> {
     // + "WHERE W.user_id = :ids "
     // + "and W.coin_id <> 10 "
     // + "and W.coin_id=C.coin_id")
-    @Query("SELECT W.*,C.price FROM WALLET W, COIN C WHERE W.coin_id=C.coin_id and W.user_id=:ids")
-    Flux<WalletCoin> findByUserId(int ids);
+    // @Query("SELECT W.*,C.price FROM WALLET W, COIN C WHERE W.coin_id=C.coin_id
+    // and W.user_id=:ids")
+    Flux<Wallet> findByUserId(int ids);
 
 }

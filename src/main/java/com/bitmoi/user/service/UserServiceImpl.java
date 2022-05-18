@@ -1,9 +1,12 @@
 package com.bitmoi.user.service;
 
+import java.util.List;
+
 import javax.security.auth.login.LoginException;
 
 import com.bitmoi.user.dto.UserJoinResponse;
 import com.bitmoi.user.dto.WalletResponse;
+import com.bitmoi.user.model.Coin;
 import com.bitmoi.user.model.LoginJwt;
 import com.bitmoi.user.model.User;
 import com.bitmoi.user.model.UserSave;
@@ -110,17 +113,18 @@ public class UserServiceImpl implements UserService {
                     return walletRepository.findByUserId(users).collectList();
                 })
                 .flatMap(wallets -> {
+                    // Mono<List<Coin>> coins= coinRepository.findAll().collectList();
                     WalletResponse walletResponse = new WalletResponse();
                     float purchaseAmount = 0.0f;
                     float appraisalAmount = 0.0f;
                     float krw = 0.0f;
-                    for (WalletCoin wallet : wallets) {
+                    for (Wallet wallet : wallets) {
                         if (wallet.getCoinId() == 10) {
                             krw = wallet.getQuantity();
                             continue;
                         }
                         purchaseAmount += wallet.getQuantity() * wallet.getAvgPrice();
-                        appraisalAmount += wallet.getPrice() * wallet.getQuantity();
+                        // appraisalAmount += wallet.getPrice() * wallet.getQuantity();
                         System.out.println(purchaseAmount + " " + appraisalAmount);
                     }
                     walletResponse.setKrw(krw);
