@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface WalletRepository extends ReactiveCrudRepository<Wallet, Long> {
-    @Query("select"
+    @Query("select "
             + "(select quantity from WALLET where user_id=W.user_id and coin_id=10) krw,"
             + "0 holdings,"
             + "sum(W.avg_price*W.quantity) purchaseAmount,"
