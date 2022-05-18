@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
                     coinRepository.findAll().doOnNext(coin -> {
                         float quantity = 0.0f;
                         if (coin.getName().equals("KRW")) {
-                            quantity = 100000;
+                            quantity = 100000000;
                         } else {
                             quantity = 0;
                         }
@@ -64,8 +64,8 @@ public class UserServiceImpl implements UserService {
                                 .coinId(coin.getCoin_id())
                                 .quantity(quantity)
                                 .avgPrice(0)
+                                .waitingQty(0.0f)
                                 .build();
-                        System.out.println("coin : " + wallet);
                         walletRepository.save(wallet).subscribe();
                     }).subscribe();
                 })
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
                 .flatMap(it -> userRepository.findByEmail(it.getEmail()))
                 .flatMap(results -> {
                     if (results > 0) {
-                        return Mono.just(UserJoinResponse.builder().message("FAIL").build());
+                        return Mono.error(new LoginException("이미 존재하는 메일주소입니다."));
                     }
                     return Mono.just(UserJoinResponse.builder().message("SUCCESS").build());
                 });
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         }).flatMap(it -> {
             String tokken = jwtProvider.createJwtToken(it);
             return Mono.just(LoginJwt.builder().accessToken(tokken).build());
-        }).switchIfEmpty(Mono.just(LoginJwt.builder().accessToken("존재하지 않은 회원입니다.").build()));
+        }).switchIfEmpty(Mono.error(new LoginException("로그인에 실패했습니다.")));
     }
 
     @Override
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
         return Flux.just(jwtProvider.decode(request.headers().asHttpHeaders().getFirst("Authorization")))
                 .flatMap(user -> {
                     return walletRepository.findByUserId(user);
-                });
+                }).switchIfEmpty(Mono.error(new LoginException("지갑 조회에 실패했습니다.")));
     }
 
 }

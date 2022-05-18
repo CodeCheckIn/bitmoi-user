@@ -1,5 +1,6 @@
 package com.bitmoi.user.handler;
 
+import com.bitmoi.user.Exception.LoginException;
 import com.bitmoi.user.dto.UserJoinResponse;
 import com.bitmoi.user.model.LoginJwt;
 import com.bitmoi.user.model.User;
@@ -36,7 +37,12 @@ public class UserHandler {
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, UserJoinResponse.class)
-                .onErrorResume(error -> ServerResponse.badRequest().build()).log();
+                .onErrorResume(error -> {
+                    if (error instanceof LoginException) {
+                        return ServerResponse.status(403).build();
+                    }
+                    return ServerResponse.badRequest().build();
+                }).log();
     }
 
     public Mono<ServerResponse> check(ServerRequest serverRequest) {
@@ -44,7 +50,12 @@ public class UserHandler {
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, UserJoinResponse.class)
-                .onErrorResume(error -> ServerResponse.badRequest().build()).log();
+                .onErrorResume(error -> {
+                    if (error instanceof LoginException) {
+                        return ServerResponse.status(403).build();
+                    }
+                    return ServerResponse.badRequest().build();
+                }).log();
     }
 
     public Mono<ServerResponse> login(ServerRequest serverRequest) {
@@ -52,7 +63,12 @@ public class UserHandler {
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, LoginJwt.class)
-                .onErrorResume(error -> ServerResponse.badRequest().build()).log();
+                .onErrorResume(error -> {
+                    if (error instanceof LoginException) {
+                        return ServerResponse.status(403).build();
+                    }
+                    return ServerResponse.badRequest().build();
+                }).log();
     }
 
     public Mono<ServerResponse> wallet(ServerRequest serverRequest) {
@@ -60,6 +76,11 @@ public class UserHandler {
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, Wallet.class)
-                .onErrorResume(error -> ServerResponse.badRequest().build()).log();
+                .onErrorResume(error -> {
+                    if (error instanceof LoginException) {
+                        return ServerResponse.status(403).build();
+                    }
+                    return ServerResponse.badRequest().build();
+                }).log();
     }
 }

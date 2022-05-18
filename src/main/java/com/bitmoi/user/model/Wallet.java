@@ -32,6 +32,8 @@ public class Wallet {
     private float quantity;
     @Column
     private float avgPrice;
+    @Column
+    private float waitingQty;
 
     @CreatedDate
     private LocalDateTime createdAt;
