@@ -8,6 +8,7 @@ import com.bitmoi.user.model.LoginJwt;
 import com.bitmoi.user.model.User;
 import com.bitmoi.user.model.UserSave;
 import com.bitmoi.user.model.Wallet;
+import com.bitmoi.user.model.WalletCoin;
 import com.bitmoi.user.repository.CoinRepository;
 import com.bitmoi.user.repository.UserRepository;
 import com.bitmoi.user.repository.WalletRepository;
@@ -105,18 +106,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<WalletResponse> wallet(ServerRequest request) {
         return Mono.just(jwtProvider.decode(request.headers().asHttpHeaders().getFirst("Authorization")))
-                .flatMap(walletRepository::findByUserId)
-                .flatMap(wallets -> {
-                    System.out.println(
-                            wallets.getAppraisalAmount() + "================== " + wallets.getPurchaseAmount());
-                    float purchaseAmount = wallets.getPurchaseAmount();
-                    float krw = 100000000;
-                    float appraisalAmount = wallets.getAppraisalAmount();
-                    wallets.setHoldings(appraisalAmount + krw);
-                    wallets.setValuationPL(appraisalAmount - purchaseAmount);
-                    wallets.setYield((wallets.getHoldings() - Float.parseFloat(initialFunds)) * 100
+                .flatMap(user -> {
+                    System.out.println("user");
+                    return walletRepository.findByUserId(user);
+                }).flatMap(wallets -> {
+                    WalletResponse walletResponse = new WalletResponse();
+                    float purchaseAmount = 0.0f;
+                    float appraisalAmount = 0.0f;
+                    float krw = 0.0f;
+                    for (WalletCoin wallet : wallets) {
+                        if (wallet.getCoinId() == 10) {
+                            krw = wallet.getQuantity();
+                            continue;
+                        }
+                        purchaseAmount += wallet.getQuantity() * wallet.getAvgPrice();
+                        appraisalAmount += wallet.getPrice() * wallet.getQuantity();
+                        System.out.println(purchaseAmount + " " + appraisalAmount);
+                    }
+                    walletResponse.setKrw(krw);
+                    walletResponse.setHoldings(appraisalAmount + krw);
+                    walletResponse.setValuationPL(appraisalAmount - purchaseAmount);
+                    walletResponse.setYield((walletResponse.getHoldings() - Float.parseFloat(initialFunds)) * 100
                             / Float.parseFloat(initialFunds));
-                    return Mono.just(wallets);
+                    return Mono.just(walletResponse);
                 });
     }
 
