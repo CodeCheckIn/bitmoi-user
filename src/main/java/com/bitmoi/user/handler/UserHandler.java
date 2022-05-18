@@ -64,7 +64,7 @@ public class UserHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, LoginJwt.class)
                 .onErrorResume(error -> {
-                    System.out.println(error.toString());
+                    System.out.println("=======" + error.toString());
                     if (error instanceof LoginException) {
                         return ServerResponse.status(401).build();
                     }
