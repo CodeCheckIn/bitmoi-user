@@ -21,7 +21,7 @@ public class WalletResponse {
     // 평가금액
     private float appraisalAmount;
     // 평가손익
-    private float valuationPL;
+    private float valuationPl;
     // 수익률
     private float yield;
 }
