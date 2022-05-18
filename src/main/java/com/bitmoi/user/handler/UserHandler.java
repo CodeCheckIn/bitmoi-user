@@ -2,6 +2,7 @@ package com.bitmoi.user.handler;
 
 import com.bitmoi.user.Exception.LoginException;
 import com.bitmoi.user.dto.UserJoinResponse;
+import com.bitmoi.user.dto.WalletResponse;
 import com.bitmoi.user.model.LoginJwt;
 import com.bitmoi.user.model.User;
 import com.bitmoi.user.model.Wallet;
@@ -73,7 +74,7 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> wallet(ServerRequest serverRequest) {
-        Flux<Wallet> response = userService.wallet(serverRequest).subscribeOn(Schedulers.boundedElastic());
+        Mono<WalletResponse> response = userService.wallet(serverRequest).subscribeOn(Schedulers.boundedElastic());
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, Wallet.class)
