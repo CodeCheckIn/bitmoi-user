@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
                     System.out.println(
                             wallets.getAppraisalAmount() + "================== " + wallets.getPurchaseAmount());
                     float purchaseAmount = wallets.getPurchaseAmount();
-                    float krw = wallets.getKrw();
+                    float krw = 100000000;
                     float appraisalAmount = wallets.getAppraisalAmount();
                     wallets.setHoldings(appraisalAmount + krw);
                     wallets.setValuationPL(appraisalAmount - purchaseAmount);
