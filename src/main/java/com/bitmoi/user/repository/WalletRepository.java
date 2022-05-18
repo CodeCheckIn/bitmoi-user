@@ -1,8 +1,6 @@
 package com.bitmoi.user.repository;
 
-import java.util.List;
-
-import com.bitmoi.user.dto.WalletResponse;
+import java.util.ArrayList;
 import com.bitmoi.user.model.Wallet;
 import com.bitmoi.user.model.WalletCoin;
 
@@ -23,6 +21,6 @@ public interface WalletRepository extends ReactiveCrudRepository<Wallet, Long> {
     // + "and W.coin_id <> 10 "
     // + "and W.coin_id=C.coin_id")
     @Query("SELECT W.*,C.price FROM WALLET W, COIN C WHERE W.coin_id=C.coin_id and W.user_id=:ids")
-    Mono<List<WalletCoin>> findByUserId(int ids);
+    Mono<ArrayList<WalletCoin>> findByUserId(int ids);
 
 }
