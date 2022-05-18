@@ -64,10 +64,11 @@ public class UserHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, LoginJwt.class)
                 .onErrorResume(error -> {
+                    System.out.println(error.toString());
                     if (error instanceof LoginException) {
-                        return ServerResponse.status(403).build();
+                        return ServerResponse.status(401).build();
                     }
-                    return ServerResponse.badRequest().build();
+                    return ServerResponse.status(403).build();
                 }).log();
     }
 
@@ -77,6 +78,7 @@ public class UserHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, Wallet.class)
                 .onErrorResume(error -> {
+
                     if (error instanceof LoginException) {
                         return ServerResponse.status(403).build();
                     }
