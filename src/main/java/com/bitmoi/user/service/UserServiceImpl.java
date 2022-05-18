@@ -106,9 +106,11 @@ public class UserServiceImpl implements UserService {
     public Mono<WalletResponse> wallet(ServerRequest request) {
         return Mono.just(jwtProvider.decode(request.headers().asHttpHeaders().getFirst("Authorization")))
                 .flatMap(user -> {
+                    System.out.println("user : " + user);
                     return walletRepository.findByUserId(user);
                 }).flatMap(wallets -> {
-                    System.out.println("================== " + wallets.toString());
+                    System.out.println(
+                            wallets.getAppraisalAmount() + "================== " + wallets.getPurchaseAmount());
                     float purchaseAmount = wallets.getPurchaseAmount();
                     float krw = wallets.getKrw();
                     float appraisalAmount = wallets.getAppraisalAmount();
