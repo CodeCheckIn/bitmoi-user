@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
                 .flatMap(user -> {
                     return walletRepository.findByUserId(user);
                 }).flatMap(wallets -> {
+                    System.out.println("================== " + wallets.toString());
                     float purchaseAmount = wallets.getPurchaseAmount();
                     float krw = wallets.getKrw();
                     float appraisalAmount = wallets.getAppraisalAmount();
