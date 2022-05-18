@@ -15,15 +15,14 @@ public interface WalletRepository extends ReactiveCrudRepository<Wallet, Long> {
             + "(select quantity from WALLET where user_id=W.user_id and coin_id=10) krw, "
             + "0 holdings, "
             + "sum(W.avg_price*W.quantity) purchaseAmount, "
-            + "sum(W.quantity*C.price) appraisalAmount, "
+            + "sum(W.quantity) appraisalAmount, "
             + "0 valuationPL, "
             + "0 yield "
             + "from WALLET W, "
             + "	 COIN C "
-            + "where W.user_id=:ids "
+            + "where W.user_id = :ids "
             + "and W.coin_id <> 10 "
-            + "and W.coin_id=C.coin_id "
-            + "group by W.user_id")
+            + "and W.coin_id=C.coin_id")
     Mono<WalletResponse> findByUserId(int ids);
 
 }
