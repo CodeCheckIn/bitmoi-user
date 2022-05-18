@@ -70,8 +70,8 @@ public class UserServiceImpl implements UserService {
                     }).subscribe();
                 })
                 .flatMap(it -> {
-                    return Mono.just(UserJoinResponse.builder().message("SUCCESS").build());
-                }).onErrorResume(error -> Mono.just(UserJoinResponse.builder().message(error.getMessage()).build()));
+                    return Mono.just(UserJoinResponse.builder().status(200).message("SUCCESS").build());
+                }).onErrorReturn(UserJoinResponse.builder().status(403).message("FAIL").build());
     }
 
     @Override
@@ -80,9 +80,9 @@ public class UserServiceImpl implements UserService {
                 .flatMap(it -> userRepository.findByEmail(it.getEmail()))
                 .flatMap(results -> {
                     if (results > 0) {
-                        return Mono.error(new LoginException("이미 존재하는 메일주소입니다."));
+                        return Mono.just(UserJoinResponse.builder().status(403).message("FAIL").build());
                     }
-                    return Mono.just(UserJoinResponse.builder().message("SUCCESS").build());
+                    return Mono.just(UserJoinResponse.builder().status(200).message("SUCCESS").build());
                 });
     }
 
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         }).flatMap(it -> {
             String tokken = jwtProvider.createJwtToken(it);
             return Mono.just(LoginJwt.builder().accessToken(tokken).build());
-        }).switchIfEmpty(Mono.error(new LoginException("로그인에 실패했습니다.")));
+        }).switchIfEmpty(Mono.just(LoginJwt.builder().status(403).accessToken("").build()));
     }
 
     @Override
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
         return Flux.just(jwtProvider.decode(request.headers().asHttpHeaders().getFirst("Authorization")))
                 .flatMap(user -> {
                     return walletRepository.findByUserId(user);
-                }).switchIfEmpty(Mono.error(new LoginException("지갑 조회에 실패했습니다.")));
+                });
     }
 
 }

@@ -18,4 +18,6 @@ import lombok.Setter;
 public class UserJoinResponse {
     @Column
     private String message;
+    @Column
+    private int status;
 }

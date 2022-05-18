@@ -13,4 +13,5 @@ import lombok.ToString;
 @AllArgsConstructor
 public class LoginJwt {
     private String accessToken;
+    private int status;
 }
