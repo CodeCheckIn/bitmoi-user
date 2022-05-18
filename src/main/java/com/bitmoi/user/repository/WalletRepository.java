@@ -11,16 +11,16 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface WalletRepository extends ReactiveCrudRepository<Wallet, Long> {
-    @Query("select "
-            + "(select quantity from WALLET where user_id=W.user_id and coin_id=10) krw, "
+    @Query("SELECT "
+            + "(SELECT quantity FROM WALLET WHERE user_id=W.user_id and coin_id=10) krw, "
             + "0 holdings, "
-            + "sum(W.avg_price*W.quantity) purchaseAmount, "
-            + "sum(W.quantity) appraisalAmount, "
+            + "SUM(W.avg_price*W.quantity) purchaseAmount, "
+            + "SUM(W.quantity*C.price) appraisalAmount, "
             + "0 valuationPL, "
             + "0 yield "
-            + "from WALLET W, "
+            + "FROM WALLET W, "
             + "	 COIN C "
-            + "where W.user_id = :ids "
+            + "WHERE W.user_id = :ids "
             + "and W.coin_id <> 10 "
             + "and W.coin_id=C.coin_id")
     Mono<WalletResponse> findByUserId(int ids);
