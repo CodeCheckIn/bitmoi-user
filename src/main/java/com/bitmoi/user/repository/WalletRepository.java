@@ -20,9 +20,10 @@ public interface WalletRepository extends ReactiveCrudRepository<Wallet, Long> {
             + "0 yield "
             + "from WALLET W, "
             + "	 COIN C "
-            + "where W.user_id=:id "
-            + "and W.coin_id <>10 "
-            + "group by user_id")
-    Mono<WalletResponse> findByUserId(int id);
+            + "where W.user_id=:ids "
+            + "and W.coin_id <> 10 "
+            + "and W.coin_id=C.coin_id "
+            + "group by W.user_id")
+    Mono<WalletResponse> findByUserId(int ids);
 
 }
