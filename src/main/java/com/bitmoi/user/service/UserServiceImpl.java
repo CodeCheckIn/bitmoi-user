@@ -106,7 +106,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<WalletResponse> wallet(ServerRequest request) {
         return Mono.just(jwtProvider.decode(request.headers().asHttpHeaders().getFirst("Authorization")))
-                .flatMap(walletRepository::findByUserId)
+                .flatMap(users -> {
+                    return walletRepository.findByUserId(users).collectList();
+                })
                 .flatMap(wallets -> {
                     WalletResponse walletResponse = new WalletResponse();
                     float purchaseAmount = 0.0f;
