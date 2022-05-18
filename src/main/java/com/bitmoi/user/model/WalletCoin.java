@@ -30,7 +30,5 @@ public class WalletCoin {
     @Column
     private float avgPrice;
     @Column
-    private float waitingQty;
-    @Column
     private float price;
 }
