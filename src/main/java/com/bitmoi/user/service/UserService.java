@@ -5,6 +5,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import com.bitmoi.user.dto.RankingResponse;
 import com.bitmoi.user.dto.UserJoinResponse;
 import com.bitmoi.user.dto.WalletResponse;
 import com.bitmoi.user.model.LoginJwt;
@@ -19,4 +20,8 @@ public interface UserService {
     Mono<LoginJwt> login(ServerRequest request);
 
     Mono<WalletResponse> wallet(ServerRequest request);
+
+    Flux<RankingResponse> ranking(ServerRequest request);
+
+    Flux<Wallet> asset(ServerRequest request);
 }

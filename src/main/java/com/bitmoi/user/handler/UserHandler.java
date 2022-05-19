@@ -1,6 +1,7 @@
 package com.bitmoi.user.handler;
 
 import com.bitmoi.user.Exception.LoginException;
+import com.bitmoi.user.dto.RankingResponse;
 import com.bitmoi.user.dto.UserJoinResponse;
 import com.bitmoi.user.dto.WalletResponse;
 import com.bitmoi.user.model.LoginJwt;
@@ -75,6 +76,34 @@ public class UserHandler {
 
     public Mono<ServerResponse> wallet(ServerRequest serverRequest) {
         Mono<WalletResponse> response = userService.wallet(serverRequest).subscribeOn(Schedulers.boundedElastic());
+        return ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response, WalletResponse.class)
+                .onErrorResume(error -> {
+
+                    if (error instanceof LoginException) {
+                        return ServerResponse.status(403).build();
+                    }
+                    return ServerResponse.badRequest().build();
+                }).log();
+    }
+
+    public Mono<ServerResponse> ranking(ServerRequest serverRequest) {
+        Flux<RankingResponse> response = userService.ranking(serverRequest).subscribeOn(Schedulers.boundedElastic());
+        return ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response, RankingResponse.class)
+                .onErrorResume(error -> {
+
+                    if (error instanceof LoginException) {
+                        return ServerResponse.status(403).build();
+                    }
+                    return ServerResponse.badRequest().build();
+                }).log();
+    }
+
+    public Mono<ServerResponse> asset(ServerRequest serverRequest) {
+        Flux<Wallet> response = userService.asset(serverRequest).subscribeOn(Schedulers.boundedElastic());
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, Wallet.class)

@@ -2,6 +2,7 @@ package com.bitmoi.user.service;
 
 import javax.security.auth.login.LoginException;
 
+import com.bitmoi.user.dto.RankingResponse;
 import com.bitmoi.user.dto.UserJoinResponse;
 import com.bitmoi.user.dto.WalletResponse;
 import com.bitmoi.user.model.LoginJwt;
@@ -119,6 +120,16 @@ public class UserServiceImpl implements UserService {
                             / Float.parseFloat(initialFunds));
                     return Mono.just(wallets);
                 });
+    }
+
+    @Override
+    public Flux<RankingResponse> ranking(ServerRequest request) {
+        return walletRepository.findRanking();
+    }
+
+    @Override
+    public Flux<Wallet> asset(ServerRequest request) {
+        return walletRepository.findWallet(Integer.valueOf(request.pathVariable("userId")));
     }
 
 }
