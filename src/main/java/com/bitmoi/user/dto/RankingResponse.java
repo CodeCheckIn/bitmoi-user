@@ -17,9 +17,9 @@ public class RankingResponse {
     // 보유자산
     private float assets;
     // 유저아이디
-    private float userId;
+    private int userId;
     // 이름
-    private float name;
+    private String name;
     // 수익률
     private float yeild;
 
