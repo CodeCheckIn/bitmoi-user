@@ -21,7 +21,7 @@ public interface WalletRepository extends ReactiveCrudRepository<Wallet, Long> {
             + "FROM WALLET W, "
             + "	 COIN C "
             + "WHERE W.user_id = :ids "
-            + "and W.coin_id <> 10 "
+            + "and W.coin_id <> 9999 "
             + "and W.coin_id=C.coin_id")
     Mono<WalletResponse> findByUserId(int ids);
 
