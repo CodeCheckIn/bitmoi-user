@@ -20,6 +20,8 @@ public class UserRouter {
                 .POST("/user/join", userHandler::join)
                 .POST("/user/check", userHandler::check)
                 .POST("/user/login", userHandler::login)
+                .GET("/user/ranking", userHandler::ranking)
+                .GET("/user/asset/{userId}", userHandler::asset)
                 .build();
     }
 }
